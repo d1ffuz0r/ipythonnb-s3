@@ -1,5 +1,4 @@
 import datetime
-import time
 
 from tornado import web
 
@@ -108,8 +107,8 @@ class S3NotebookManager(NotebookManager):
         #path = self._get_checkpoint_path(notebook_id, checkpoint_id)
         #key = self.bucket.get_key(path)
         # nbname = key.get_metadata('nbname')
-        #last_modified = time.strptime(key.last_modified, '%a, %d %b %Y %H:%M:%S %Z')
-        last_modified = time.strptime(checkpoint_id, '%Y-%m-%dT%H:%M:%SZ')
+        #last_modified = datetime.datetime.strptime(key.last_modified, '%a, %d %b %Y %H:%M:%S %Z')
+        last_modified = datetime.datetime.strptime(checkpoint_id, '%Y-%m-%dT%H:%M:%SZ')
         info = dict(
             checkpoint_id=checkpoint_id,
             last_modified=last_modified,
@@ -133,18 +132,19 @@ class S3NotebookManager(NotebookManager):
             raise web.HTTPError(400, u'Unexpected error while saving checkpoint: %s' % e)
 
         # return the checkpoint info
-        return self.get_checkpoint_info(notebook_id, checkpoint_id)
+        return self._get_checkpoint_info(notebook_id, checkpoint_id)
 
     def list_checkpoints(self, notebook_id):
         """list the checkpoints for a given notebook
         """
+        print "list_checkpoints %s" % (self.s3_prefix + notebook_id + '/checkpoints/')
         keys = self.bucket.list(self.s3_prefix + notebook_id + '/checkpoints/')
 
         checkpoints = []
         for key in keys:
             checkpoint_id = key.name.split('/')[-1]
             # name = self.bucket.get_key(self.s3_prefix + id).get_metadata('nbname')
-            last_modified = time.strptime(checkpoint_id, '%Y-%m-%dT%H:%M:%SZ')
+            last_modified = datetime.datetime.strptime(checkpoint_id, '%Y-%m-%dT%H:%M:%SZ')
             info = dict(
                 checkpoint_id=checkpoint_id,
                 last_modified=last_modified,
