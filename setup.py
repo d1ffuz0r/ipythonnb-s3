@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='s3nbmanager',
-    version='0.0.1',
+    version='0.0.2',
     description='IPython notebook manager which saves to S3',
     py_modules=['s3nbmanager'],
     url='https://github.com/davidbrai/ipythonnb-s3',
