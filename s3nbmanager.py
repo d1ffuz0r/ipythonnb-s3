@@ -137,7 +137,6 @@ class S3NotebookManager(NotebookManager):
     def list_checkpoints(self, notebook_id):
         """list the checkpoints for a given notebook
         """
-        print "list_checkpoints %s" % (self.s3_prefix + notebook_id + '/checkpoints/')
         keys = self.bucket.list(self.s3_prefix + notebook_id + '/checkpoints/')
 
         checkpoints = []
