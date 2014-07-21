@@ -33,7 +33,7 @@ class S3NotebookManager(NotebookManager):
             if len(tokens) > 2 and tokens[-2] == 'checkpoints':
                 continue
             notebook_id = tokens[-1]
-            name = self.bucket.get_key(self.s3_prefix + notebook_id).get_metadata('nbname')
+            name = self.bucket.get_key(notebook_id).get_metadata('nbname')
             self.mapping[notebook_id] = name
 
     def list_notebooks(self):
