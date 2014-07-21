@@ -37,6 +37,7 @@ class S3NotebookManager(NotebookManager):
             self.mapping[notebook_id] = name
 
     def list_notebooks(self):
+        self.load_notebook_names()
         data = [dict(notebook_id=id, name=name) for id, name in self.mapping.items()]
         data = sorted(data, key=lambda item: item['name'])
         return data
@@ -174,3 +175,7 @@ class S3NotebookManager(NotebookManager):
         """delete a notebook's checkpoint"""
         cp_path = self._get_checkpoint_path(notebook_id, checkpoint_id)
         self.bucket.delete_key(cp_path)
+
+    def delete_notebook(self, notebook_id):
+        bucketListResultSet = self.bucket.list(prefix=notebook_id)
+        self.bucket.delete_keys([key.name for key in bucketListResultSet])
