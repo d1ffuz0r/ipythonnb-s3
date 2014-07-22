@@ -46,7 +46,7 @@ class S3NotebookManager(NotebookManager):
         if not self.notebook_exists(notebook_id):
             raise web.HTTPError(404, u'Notebook does not exist: %s' % notebook_id)
         try:
-            key = self.bucket.get_key(self.s3_prefix + notebook_id)
+            key = self.bucket.get_key(notebook_id)
             s = key.get_contents_as_string()
         except:
             raise web.HTTPError(500, u'Notebook cannot be read.')
