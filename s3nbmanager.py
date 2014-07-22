@@ -97,11 +97,10 @@ class S3NotebookManager(NotebookManager):
     def info_string(self):
         return "Serving notebooks from s3. bucket name: %s" % self.s3_bucket
 
-
     # Checkpoint-related utilities
     def _get_checkpoint_path(self, notebook_id, checkpoint_id):
         """find the path to a checkpoint"""
-        return self.s3_prefix + notebook_id + '/checkpoints/' + checkpoint_id
+        return notebook_id + '/checkpoints/' + checkpoint_id
 
     def _get_checkpoint_info(self, notebook_id, checkpoint_id):
         """construct the info dict for a given checkpoint"""
@@ -138,7 +137,7 @@ class S3NotebookManager(NotebookManager):
     def list_checkpoints(self, notebook_id):
         """list the checkpoints for a given notebook
         """
-        keys = self.bucket.list(self.s3_prefix + notebook_id + '/checkpoints/')
+        keys = self.bucket.list(notebook_id + '/checkpoints/')
 
         checkpoints = []
         for key in keys:
